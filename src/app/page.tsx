@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { ComparisonSearchPanel, ComparisonBoard } from '@/components/comparison';
+import { ComparisonBoard } from '@/components/comparison';
+import CompanySearch from '@/components/CompanySearch';
 import { fetchCompanyInfo, fetchQuoteData } from '@/lib/api';
 import { ComparisonItem } from '@/types';
 
@@ -75,11 +76,13 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-screen-xl mx-auto px-4 py-8 space-y-6">
-        <ComparisonSearchPanel
+        <CompanySearch
+          comparisonMode={true}
           tickers={tickers}
-          onAdd={handleAddTicker}
+          onSearch={handleAddTicker}
           onRemove={handleRemoveTicker}
           maxTickers={3}
+          title="Compare Stocks"
         />
 
         <ComparisonBoard
