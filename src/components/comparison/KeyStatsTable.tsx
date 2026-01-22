@@ -46,7 +46,7 @@ export default function KeyStatsTable({ data }: KeyStatsTableProps) {
 
   const stats = [
     { label: 'Current Price', value: formatCurrency(quote.cf_last) },
-    { label: '% Change', value: formatChange(quote.cf_netchng, quote.pctchng) },
+    { label: 'Change', value: formatChange(quote.cf_netchng, quote.pctchng) },
     { label: 'Volume', value: formatNumber(quote.cf_volume) },
     { label: 'Market Value', value: formatMarketValue(quote.mkt_value) },
     { label: '52W High', value: formatCurrency(quote['52wk_high']) },

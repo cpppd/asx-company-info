@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { QuoteData, CompanyData } from '@/types';
 import KeyStatsTable from './KeyStatsTable';
 
@@ -20,12 +21,21 @@ export default function ComparisonColumn({
   companyData,
   onRemove,
 }: ComparisonColumnProps) {
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
+
   const truncateText = (text: string, lines: number = 3): string => {
     const words = text.split(' ');
     const avgWordsPerLine = 12;
     const maxWords = lines * avgWordsPerLine;
     if (words.length <= maxWords) return text;
     return words.slice(0, maxWords).join(' ') + '...';
+  };
+
+  const shouldShowReadMore = (text: string): boolean => {
+    const words = text.split(' ');
+    const avgWordsPerLine = 12;
+    const maxWords = 3 * avgWordsPerLine;
+    return words.length > maxWords;
   };
 
   return (
@@ -76,9 +86,19 @@ export default function ComparisonColumn({
             {companyData && companyData.company_info && (
               <div className="pt-4 border-t border-[#e9ecef]">
                 <h4 className="text-sm font-semibold text-[#6c757d] mb-2">About</h4>
-                <p className="text-sm text-[#212529] leading-relaxed line-clamp-3">
-                  {truncateText(companyData.company_info)}
+                <p className="text-sm text-[#212529] leading-relaxed">
+                  {isAboutExpanded
+                    ? companyData.company_info
+                    : truncateText(companyData.company_info)}
                 </p>
+                {shouldShowReadMore(companyData.company_info) && (
+                  <button
+                    onClick={() => setIsAboutExpanded(!isAboutExpanded)}
+                    className="text-sm text-[#20705c] hover:text-[#185a4a] font-medium mt-2 transition-colors"
+                  >
+                    {isAboutExpanded ? 'Show less' : 'Read more'}
+                  </button>
+                )}
               </div>
             )}
           </div>
