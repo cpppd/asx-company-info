@@ -69,7 +69,7 @@ export default function Home() {
             ASX Stock Comparison
           </h1>
           <p className="text-[#6c757d]">
-            Compare up to 3 Australian Stock Exchange listed companies
+            Compare up to 5 Australian Stock Exchange listed companies
           </p>
         </div>
       </header>
@@ -81,7 +81,7 @@ export default function Home() {
           tickers={tickers}
           onSearch={handleAddTicker}
           onRemove={handleRemoveTicker}
-          maxTickers={3}
+          maxTickers={5}
           title="Compare Stocks"
         />
 

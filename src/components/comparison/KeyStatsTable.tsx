@@ -7,7 +7,7 @@ interface KeyStatsTableProps {
   data: QuoteData;
 }
 
-function formatCurrency(value: number): string {
+export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-AU', {
     style: 'currency',
     currency: 'AUD',
@@ -15,11 +15,11 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function formatNumber(value: number): string {
+export function formatNumber(value: number): string {
   return new Intl.NumberFormat('en-AU').format(value);
 }
 
-function formatMarketValue(value: number): string {
+export function formatMarketValue(value: number): string {
   if (value >= 1_000_000_000) {
     return `$${(value / 1_000_000_000).toFixed(2)}B`;
   }
@@ -29,7 +29,7 @@ function formatMarketValue(value: number): string {
   return formatCurrency(value);
 }
 
-function formatChange(change: number, percent: number): JSX.Element {
+export function formatChange(change: number, percent: number): JSX.Element {
   const isPositive = change >= 0;
   const sign = isPositive ? '+' : '';
   const color = isPositive ? 'text-[#198754]' : 'text-[#dc3545]';
