@@ -24,3 +24,11 @@ export interface AppState {
   quoteData: QuoteData | null;
   currentTicker: string;
 }
+
+export interface ComparisonItem {
+  ticker: string;
+  loading: boolean;
+  error?: string;
+  quoteData?: QuoteData;
+  companyData?: CompanyData;
+}
