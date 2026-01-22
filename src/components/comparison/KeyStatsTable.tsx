@@ -50,6 +50,7 @@ export default function KeyStatsTable({ data }: KeyStatsTableProps) {
     { label: 'Volume', value: formatNumber(quote.cf_volume) },
     { label: 'Market Value', value: formatMarketValue(quote.mkt_value) },
     { label: '52W High', value: formatCurrency(quote['52wk_high']) },
+    { label: '52W Low', value: formatCurrency(quote['52wk_low']) },
   ];
 
   return (

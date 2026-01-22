@@ -10,6 +10,7 @@ export interface Quote {
   cf_volume: number;
   mkt_value: number;
   '52wk_high': number;
+  '52wk_low': number;
 }
 
 export interface QuoteData {
