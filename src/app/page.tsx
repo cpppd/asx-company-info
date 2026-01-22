@@ -65,12 +65,9 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white border-b border-[#e9ecef] py-8">
         <div className="max-w-screen-xl mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold text-[#212529] mb-2">
+          <h1 className="text-3xl font-bold text-[#212529]">
             ASX Stock Comparison
           </h1>
-          <p className="text-[#6c757d]">
-            Compare up to 5 Australian Stock Exchange listed companies
-          </p>
         </div>
       </header>
 
@@ -88,6 +85,7 @@ export default function Home() {
         <ComparisonBoard
           items={comparisonItems}
           onRemove={handleRemoveTicker}
+          maxTickers={5}
         />
       </main>
     </div>

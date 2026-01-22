@@ -21,7 +21,7 @@ interface CompanySearchProps {
   title?: string;
 }
 
-const POPULAR_STOCKS = ['CBA', 'NAB', 'BHP'];
+const POPULAR_STOCKS = ['CBA', 'NAB', 'ANZ', 'WBC', 'BHP'];
 
 export default function CompanySearch({
   onSearch,
@@ -138,6 +138,11 @@ export default function CompanySearch({
         </div>
         {error && (
           <p className="mt-2 text-sm text-[#dc3545]" role="alert">{error}</p>
+        )}
+        {comparisonMode && (
+          <p className="mt-2 text-sm text-[#6c757d]">
+            Compare up to {maxTickers} Australian Stock Exchange listed companies
+          </p>
         )}
       </form>
 

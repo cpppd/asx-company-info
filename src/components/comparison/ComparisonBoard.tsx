@@ -6,9 +6,10 @@ import ComparisonGrid from './ComparisonGrid';
 interface ComparisonBoardProps {
   items: ComparisonItem[];
   onRemove: (ticker: string) => void;
+  maxTickers?: number;
 }
 
-export default function ComparisonBoard({ items, onRemove }: ComparisonBoardProps) {
+export default function ComparisonBoard({ items, onRemove, maxTickers = 5 }: ComparisonBoardProps) {
   if (items.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-[#e9ecef] shadow-[0_1px_3px_rgba(0,0,0,0.1)] p-12 text-center">
@@ -31,7 +32,7 @@ export default function ComparisonBoard({ items, onRemove }: ComparisonBoardProp
             Add stocks to compare
           </h3>
           <p className="text-[#6c757d]">
-            Enter up to 3 ASX ticker symbols above to see them side by side.
+            Enter up to {maxTickers} ASX ticker symbols above to see them side by side.
           </p>
         </div>
       </div>
