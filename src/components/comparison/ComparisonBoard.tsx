@@ -2,15 +2,28 @@
 
 import { ComparisonItem } from '@/types';
 import ComparisonGrid from './ComparisonGrid';
+import ComparisonActions from './ComparisonActions';
 
 interface ComparisonBoardProps {
   items: ComparisonItem[];
   onRemove: (ticker: string) => void;
   onTickerClick?: (ticker: string) => void;
+  onSave?: () => void;
+  onShare?: () => void;
+  onViewSaved?: () => void;
   maxTickers?: number;
 }
 
-export default function ComparisonBoard({ items, onRemove, onTickerClick, maxTickers = 5 }: ComparisonBoardProps) {
+export default function ComparisonBoard({
+  items,
+  onRemove,
+  onTickerClick,
+  onSave,
+  onShare,
+  onViewSaved,
+  maxTickers = 5,
+}: ComparisonBoardProps) {
+  const tickers = items.map((item) => item.ticker);
   if (items.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-[#e9ecef] shadow-[0_1px_3px_rgba(0,0,0,0.1)] p-12 text-center">
@@ -37,5 +50,15 @@ export default function ComparisonBoard({ items, onRemove, onTickerClick, maxTic
     );
   }
 
-  return <ComparisonGrid items={items} onRemove={onRemove} onTickerClick={onTickerClick} />;
+  return (
+    <>
+      <ComparisonActions
+        tickers={tickers}
+        onSave={onSave ?? (() => { })}
+        onShare={onShare ?? (() => { })}
+        onViewSaved={onViewSaved ?? (() => { })}
+      />
+      <ComparisonGrid items={items} onRemove={onRemove} onTickerClick={onTickerClick} />
+    </>
+  );
 }
