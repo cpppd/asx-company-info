@@ -12,6 +12,7 @@ import {
 interface ComparisonGridProps {
   items: ComparisonItem[];
   onRemove: (ticker: string) => void;
+  onTickerClick?: (ticker: string) => void;
 }
 
 interface StatRow {
@@ -23,7 +24,7 @@ interface StatRow {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps) {
+export default function ComparisonGrid({ items, onRemove, onTickerClick }: ComparisonGridProps) {
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
@@ -175,7 +176,15 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
                 style={{ width: columnWidth }}
               >
                 <div className="flex items-center gap-2">
-                  <span>{item.ticker}</span>
+                  <span
+                    className="cursor-pointer hover:text-[#20705c] hover:underline transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onTickerClick?.(item.ticker);
+                    }}
+                  >
+                    {item.ticker}
+                  </span>
                   <button
                     onClick={() => onRemove(item.ticker)}
                     className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-[#dee2e6] text-[#6c757d] hover:text-[#dc3545] transition-colors"
