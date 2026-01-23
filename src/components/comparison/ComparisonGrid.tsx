@@ -147,7 +147,7 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
           {statRows.map((row, index) => (
             <tr
               key={row.label}
-              className={index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]/50'}
+              className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]/50'} hover:bg-[#e9ecef] transition-colors cursor-pointer`}
             >
               <td
                 className="px-4 py-3 text-sm text-[#6c757d] border-r border-[#e9ecef]"
