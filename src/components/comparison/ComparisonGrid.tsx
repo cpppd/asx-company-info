@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react';
 import { ComparisonItem } from '@/types';
-import ComparisonColumn from './ComparisonColumn';
 import {
   formatCurrency,
   formatNumber,
@@ -24,15 +23,9 @@ interface StatRow {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-// Threshold for switching between card and table view
-const CARD_VIEW_THRESHOLD = 3;
-
 export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps) {
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
-
-  // Use card view for 3 or fewer tickers, table view for more than 3
-  const useCardView = items.length <= CARD_VIEW_THRESHOLD;
 
   // Table View stat definitions with sort values
   const statRows: StatRow[] = [
@@ -128,27 +121,6 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
       </span>
     );
   };
-
-  // Card View (for ≤3 tickers)
-  if (useCardView) {
-    return (
-      <div className="overflow-x-auto pb-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-w-fit">
-          {items.map((item) => (
-            <ComparisonColumn
-              key={item.ticker}
-              ticker={item.ticker}
-              loading={item.loading}
-              error={item.error}
-              quoteData={item.quoteData}
-              companyData={item.companyData}
-              onRemove={() => onRemove(item.ticker)}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   const renderCellContent = (item: ComparisonItem, getValue: (item: ComparisonItem) => React.ReactNode) => {
     if (item.loading) {
