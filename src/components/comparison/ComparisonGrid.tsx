@@ -95,8 +95,8 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
     return getValue(item);
   };
 
-  // Calculate column width: each column gets equal share
-  const totalColumns = 1 + items.length;
+  // Calculate column width: ticker column + stat columns
+  const totalColumns = 1 + statRows.length;
   const columnWidth = `${100 / totalColumns}%`;
 
   return (
@@ -108,19 +108,34 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
               className="text-left px-4 py-3 text-sm font-semibold text-[#212529]"
               style={{ width: columnWidth }}
             >
-              Key Statistics
+              Ticker
             </th>
-            {items.map((item) => (
+            {statRows.map((row) => (
               <th
-                key={item.ticker}
-                className="text-center px-4 py-3 text-sm font-bold text-[#212529]"
+                key={row.label}
+                className="text-center px-4 py-3 text-sm font-semibold text-[#212529]"
                 style={{ width: columnWidth }}
               >
-                <div className="flex items-center justify-center gap-2">
+                {row.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, index) => (
+            <tr
+              key={item.ticker}
+              className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]/50'} hover:bg-[#e9ecef] transition-colors cursor-pointer`}
+            >
+              <td
+                className="px-4 py-3 text-sm font-bold text-[#212529] border-r border-[#e9ecef]"
+                style={{ width: columnWidth }}
+              >
+                <div className="flex items-center gap-2">
                   <span>{item.ticker}</span>
                   <button
                     onClick={() => onRemove(item.ticker)}
-                    className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-[#e9ecef] text-[#6c757d] hover:text-[#dc3545] transition-colors"
+                    className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-[#dee2e6] text-[#6c757d] hover:text-[#dc3545] transition-colors"
                     aria-label={`Remove ${item.ticker}`}
                   >
                     <svg
@@ -139,25 +154,10 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
                     </svg>
                   </button>
                 </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {statRows.map((row, index) => (
-            <tr
-              key={row.label}
-              className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]/50'} hover:bg-[#e9ecef] transition-colors cursor-pointer`}
-            >
-              <td
-                className="px-4 py-3 text-sm text-[#6c757d] border-r border-[#e9ecef]"
-                style={{ width: columnWidth }}
-              >
-                {row.label}
               </td>
-              {items.map((item) => (
+              {statRows.map((row) => (
                 <td
-                  key={item.ticker}
+                  key={row.label}
                   className="px-4 py-3 text-sm font-semibold text-[#212529] text-center"
                   style={{ width: columnWidth }}
                 >
