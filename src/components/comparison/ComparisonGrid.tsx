@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { ComparisonItem } from '@/types';
 import ComparisonColumn from './ComparisonColumn';
 import {
@@ -16,15 +17,117 @@ interface ComparisonGridProps {
 
 interface StatRow {
   label: string;
+  key: string;
   getValue: (item: ComparisonItem) => React.ReactNode;
+  getSortValue: (item: ComparisonItem) => number;
 }
+
+type SortDirection = 'asc' | 'desc' | null;
 
 // Threshold for switching between card and table view
 const CARD_VIEW_THRESHOLD = 3;
 
 export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps) {
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+
   // Use card view for 3 or fewer tickers, table view for more than 3
   const useCardView = items.length <= CARD_VIEW_THRESHOLD;
+
+  // Table View stat definitions with sort values
+  const statRows: StatRow[] = [
+    {
+      label: 'Price',
+      key: 'price',
+      getValue: (item) =>
+        item.quoteData ? formatCurrency(item.quoteData.quote.cf_last) : '—',
+      getSortValue: (item) => item.quoteData?.quote.cf_last ?? -Infinity,
+    },
+    {
+      label: 'Change',
+      key: 'change',
+      getValue: (item) =>
+        item.quoteData
+          ? formatChange(item.quoteData.quote.cf_netchng, item.quoteData.quote.pctchng)
+          : '—',
+      getSortValue: (item) => item.quoteData?.quote.pctchng ?? -Infinity,
+    },
+    {
+      label: 'Market Value',
+      key: 'marketValue',
+      getValue: (item) =>
+        item.quoteData ? formatMarketValue(item.quoteData.quote.mkt_value) : '—',
+      getSortValue: (item) => item.quoteData?.quote.mkt_value ?? -Infinity,
+    },
+    {
+      label: 'Volume',
+      key: 'volume',
+      getValue: (item) =>
+        item.quoteData ? formatNumber(item.quoteData.quote.cf_volume) : '—',
+      getSortValue: (item) => item.quoteData?.quote.cf_volume ?? -Infinity,
+    },
+    {
+      label: '52W High',
+      key: '52wHigh',
+      getValue: (item) =>
+        item.quoteData ? formatCurrency(item.quoteData.quote['52wk_high']) : '—',
+      getSortValue: (item) => item.quoteData?.quote['52wk_high'] ?? -Infinity,
+    },
+    {
+      label: '52W Low',
+      key: '52wLow',
+      getValue: (item) =>
+        item.quoteData ? formatCurrency(item.quoteData.quote['52wk_low']) : '—',
+      getSortValue: (item) => item.quoteData?.quote['52wk_low'] ?? -Infinity,
+    },
+  ];
+
+  // Handle column header click for sorting
+  const handleSort = (key: string) => {
+    if (sortColumn === key) {
+      // Cycle through: asc -> desc -> null
+      if (sortDirection === 'asc') {
+        setSortDirection('desc');
+      } else if (sortDirection === 'desc') {
+        setSortColumn(null);
+        setSortDirection(null);
+      }
+    } else {
+      setSortColumn(key);
+      setSortDirection('asc');
+    }
+  };
+
+  // Sort items based on current sort state
+  const sortedItems = useMemo(() => {
+    if (!sortColumn || !sortDirection) return items;
+
+    const statRow = statRows.find((row) => row.key === sortColumn);
+    if (!statRow) return items;
+
+    return [...items].sort((a, b) => {
+      const aValue = statRow.getSortValue(a);
+      const bValue = statRow.getSortValue(b);
+
+      if (sortDirection === 'asc') {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+  }, [items, sortColumn, sortDirection]);
+
+  // Render sort indicator
+  const renderSortIndicator = (key: string) => {
+    if (sortColumn !== key) {
+      return <span className="ml-1 text-[#adb5bd]">⇅</span>;
+    }
+    return (
+      <span className="ml-1 text-[#20705c]">
+        {sortDirection === 'asc' ? '▲' : '▼'}
+      </span>
+    );
+  };
 
   // Card View (for ≤3 tickers)
   if (useCardView) {
@@ -46,42 +149,6 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
       </div>
     );
   }
-
-  // Table View (for >3 tickers)
-  const statRows: StatRow[] = [
-    {
-      label: 'Price',
-      getValue: (item) =>
-        item.quoteData ? formatCurrency(item.quoteData.quote.cf_last) : '—',
-    },
-    {
-      label: 'Change',
-      getValue: (item) =>
-        item.quoteData
-          ? formatChange(item.quoteData.quote.cf_netchng, item.quoteData.quote.pctchng)
-          : '—',
-    },
-    {
-      label: 'Market Value',
-      getValue: (item) =>
-        item.quoteData ? formatMarketValue(item.quoteData.quote.mkt_value) : '—',
-    },
-    {
-      label: 'Volume',
-      getValue: (item) =>
-        item.quoteData ? formatNumber(item.quoteData.quote.cf_volume) : '—',
-    },
-    {
-      label: '52W High',
-      getValue: (item) =>
-        item.quoteData ? formatCurrency(item.quoteData.quote['52wk_high']) : '—',
-    },
-    {
-      label: '52W Low',
-      getValue: (item) =>
-        item.quoteData ? formatCurrency(item.quoteData.quote['52wk_low']) : '—',
-    },
-  ];
 
   const renderCellContent = (item: ComparisonItem, getValue: (item: ComparisonItem) => React.ReactNode) => {
     if (item.loading) {
@@ -113,16 +180,20 @@ export default function ComparisonGrid({ items, onRemove }: ComparisonGridProps)
             {statRows.map((row) => (
               <th
                 key={row.label}
-                className="text-center px-4 py-3 text-sm font-semibold text-[#212529]"
+                className="text-center px-4 py-3 text-sm font-semibold text-[#212529] cursor-pointer hover:bg-[#e9ecef] transition-colors select-none"
                 style={{ width: columnWidth }}
+                onClick={() => handleSort(row.key)}
               >
-                {row.label}
+                <span className="inline-flex items-center justify-center">
+                  {row.label}
+                  {renderSortIndicator(row.key)}
+                </span>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {items.map((item, index) => (
+          {sortedItems.map((item, index) => (
             <tr
               key={item.ticker}
               className={`${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]/50'} hover:bg-[#e9ecef] transition-colors cursor-pointer`}
