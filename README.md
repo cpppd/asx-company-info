@@ -71,6 +71,34 @@ A modern, responsive web application for searching, viewing, and comparing ASX-l
 - `src/lib`: Utility functions and API helpers.
 - `src/types`: TypeScript interfaces and type definitions.
 
+## Architectural Decisions & Approach
+
+### 1. Client-Side Persistence (Local Storage)
+**Decision:** Use `localStorage` for saving comparison lists.
+**Justification:** This allows for a personalized user experience (saving favorites) without the complexity of implementing a full backend user authentication system, database, and session management. It keeps the application lightweight and privacy-friendly, as data never leaves the user's device.
+
+### 2. Stateless State Management (URL Parameters)
+**Decision:** The application drives the comparison state primarily through URL query parameters (e.g., `?tickers=ASX,BHP`).
+**Justification:** This makes the application "stateless" and easily shareable. A user can copy the URL and send it to a colleague, and they will see the exact same view. It simplifies the sharing architecture by removing the need to generate and store unique "share IDs" in a database.
+
+### 3. Unified Table View
+**Decision:** Enforced a consistent **Table View** for all comparison sizes (1-5 tickers), removing a previous card-based view for smaller selections.
+**Justification:** While cards are visually appealing for single items, a table is objectively superior for *comparing* data. Aligned columns make scanning financial metrics (Market Cap, P/E Ratio, Yield) across multiple companies significantly faster and clearer. A unified view also reduces maintenance overhead and provides a consistent UI.
+
+### 4. Trade-offs & Scope
+- **Scope**: The MVP focuses on the *latest* snapshot of financial data rather than historical trends.
+- **Mobile Experience**: Large data tables are inherently difficult on mobile. Horizontal scrolling to preserve data density is utilized, trading off some mobile ergonomics for data completeness.
+- **Data Limit**: Comparisons are capped at **5 companies** to strictly control performance and UI clutter.
+
+## Future Improvements
+
+If we were to expand this project further, here are the key areas for improvement:
+
+1.  **Historical Data Visualization**: Add charts (Line/Candlestick) to compare stock price performance over time (1M, 6M, 1Y).
+2.  **User Accounts (Auth)**: Implement NextAuth.js and a database (PostgreSQL/Supabase) to allow users to sync their saved comparisons across devices.
+3.  **Export Data**: Add a "Download CSV" button to allow analysts to export the comparison table for use in Excel.
+4.  **Advanced Filtering**: Allow users to filter the search by Industry Group or Market Cap range.
+
 ## Learn More
 
 To learn more about the technologies used in this project:
