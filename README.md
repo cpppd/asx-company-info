@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASX Company Information Dashboard
+
+A modern, responsive web application for searching, viewing, and comparing ASX-listed companies. Built with Next.js 16, React 19, and Tailwind CSS 4.
+
+## Features
+
+- **Company Search**: robust search functionality allowing users to find companies by ticker symbol or name.
+- **Detailed Company Info**: View comprehensive details including company descriptions, industry sectors, and key financial statistics (Market Cap, Share Price, etc.).
+- **Stock Comparison**:
+  - Compare up to **5 companies** side-by-side.
+  - **Table View**: A clean, data-rich table layout for easy comparison of financial metrics.
+  - **Dynamic Highlights**: Hover effects on table rows to easily track specific metrics across multiple companies.
+- **Save & Share**:
+  - **Save Comparisons**: Save your frequently checked comparisons to your local browser storage.
+  - **Shareable URLs**: Generate unique URLs for your comparisons to share with others (e.g., `/?tickers=BHP,RIO,FMG`).
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (Latest LTS recommended)
+- npm, yarn, or pnpm
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/cpppd/asx-company-info.git
+   cd asx-company-info
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Configure Environment Variables:**
+
+   Create a `.env.local` file in the root directory and add the following keys:
+
+   ```bash
+   NEXT_PUBLIC_API_BASE_URL=https://public.investorhub.com
+   API_KEY=your_api_key_here
+   ```
+
+   > Note: You will need a valid `API_KEY` to fetch data from the InvestorHub API.
+
+4. **Run the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Project Structure
+
+- `src/app`: App router pages and layouts.
+- `src/components`: Reusable UI components (Search, Comparison Table, Stock Cards).
+- `src/lib`: Utility functions and API helpers.
+- `src/types`: TypeScript interfaces and type definitions.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [React Documentation](https://react.dev/)
