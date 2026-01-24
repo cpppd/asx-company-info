@@ -12,11 +12,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "ASX Company Information",
-  description: "Search for Australian Stock Exchange listed companies and view key financial statistics",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
